@@ -3,31 +3,385 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Motivation Hub</title>
-    <link rel="stylesheet" href="style.css">
+    <title>A Day in the Life - Culinary Journey</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #A0522D;
+            --secondary: #778899;
+            --accent: #D2691E;
+            --background: #F5F5F5;
+            --text: #333333;
+            --dark-bg: #1A1A1A;
+            --dark-text: #F5F5F5;
+            --card-shadow: 8px 8px 16px rgba(0,0,0,0.1), -8px -8px 16px rgba(255,255,255,0.8);
+            --dark-card-shadow: 8px 8px 16px rgba(0,0,0,0.5), -8px -8px 16px rgba(255,255,255,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            --background: var(--dark-bg);
+            --text: var(--dark-text);
+        }
+
+        /* Rain Animation */
+        .rain {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+        .drop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: var(--primary);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            width: 50%;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            height: 80vh;
+            background: url('https://picsum.photos/2000/1500?random=1') center/cover;
+            border-radius: 20px 0 0 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+        }
+
+        .dark-mode .card {
+            box-shadow: var(--dark-card-shadow);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 5%;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            aspect-ratio: 1;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-info {
+            transform: translateY(0);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background: var(--accent);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-content {
+                width: 100%;
+                margin-bottom: 50px;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-image {
+                position: relative;
+                width: 100%;
+                height: 50vh;
+                transform: none;
+                border-radius: 20px;
+                margin-top: 30px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Rain Animation Container -->
+    <div class="rain"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">A Day in the Life</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#products">Products</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="title">The Rise</h1>
-            <p class="subtitle">Inspiration is one click away.</p>
-            <button id="generate-quote" class="cta-button">Get Inspired</button>
+    <section class="hero" id="home">
+        <div class="hero-content" data-aos="fade-right">
+            <h1>Experience the Art of Living</h1>
+            <p>Discover the perfect blend of tradition and innovation in every moment of your day.</p>
+            <button class="btn">Explore Our Story</button>
+        </div>
+        <div class="hero-image" data-aos="fade-left"></div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products">
+        <h2 class="section-title" data-aos="fade-up">Our Signature Collection</h2>
+        <div class="products-grid">
+            <div class="product-card card" data-aos="fade-up">
+                <img src="https://picsum.photos/800/800?random=2" alt="Product 1">
+                <div class="product-info">
+                    <h3>Morning Ritual</h3>
+                    <p>Start your day with our premium selection</p>
+                </div>
+            </div>
+            <div class="product-card card" data-aos="fade-up" data-aos-delay="100">
+                <img src="https://picsum.photos/800/800?random=3" alt="Product 2">
+                <div class="product-info">
+                    <h3>Afternoon Delight</h3>
+                    <p>Perfect companions for your midday break</p>
+                </div>
+            </div>
+            <div class="product-card card" data-aos="fade-up" data-aos-delay="200">
+                <img src="https://picsum.photos/800/800?random=4" alt="Product 3">
+                <div class="product-info">
+                    <h3>Evening Essence</h3>
+                    <p>Unwind with our evening collection</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Motivational Content Section -->
-    <section class="content-section">
-        <div class="quote-box">
-            <p id="motivational-quote" class="quote-text">"Click the button to receive a new dose of inspiration!"</p>
-        </div>
-    </section>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
 
-    <footer>
-        <p>© 2024 Creative Motivation Hub</p>
-    </footer>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
 
-    <script src="js/contentEngine.js"></script>
-    <script src="js/main.js"></script>
+        // Rain Animation
+        function createRain() {
+            const rain = document.querySelector('.rain');
+            for (let i = 0; i < 100; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('drop');
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = Math.random() * 1 + 0.5 + 's';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                rain.appendChild(drop);
+            }
+        }
+        createRain();
+
+        // Theme Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+    </script>
 </body>
 </html>
